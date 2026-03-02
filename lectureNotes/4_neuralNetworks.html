@@ -304,7 +304,7 @@ y_j &amp;= \phi_{j0} + \sum_{d=1}^{D} \phi_{jd} \underset{h_d}{\underbrace{a(\th
 <h2>Deep Neural Network</h2>
 <p><span class="math display">\[\begin{align*}
 \mathbf{h}_1 &amp;= \mathbf{a}(\mathbf{\beta}_0 + \mathbf{\Omega}_0\mathbf{x}) \\
-\mathbf{h}_k &amp;= \mathbf{a}(\mathbf{\beta}_{k-1} + \mathbf{\Omega}_{k-1}\mathbf{h}_{k-1}), \quad k=2,\dots,K \\
+\mathbf{h}_k &amp;= \mathbf{a}(\underbrace{\mathbf{\beta}_{k-1} + \mathbf{\Omega}_{k-1}\mathbf{h}_{k-1}}_{\mathbf{f}_{k-1}}), \quad k=2,\dots,K \\
 \mathbf{y} &amp;= \mathbf{\beta}_K + \mathbf{\Omega}_K\mathbf{h}_K
 \end{align*}\]</span></p>
 
@@ -325,8 +325,10 @@ y_j &amp;= \phi_{j0} + \sum_{d=1}^{D} \phi_{jd} \underset{h_d}{\underbrace{a(\th
 \end{align*}\]</span> requires computing <span class="math inline">\(\frac{\partial l_i}{\partial \mathbf{\beta}_k}\)</span> and <span class="math inline">\(\frac{\partial l_i}{\partial \mathbf{\Omega}_k}\)</span> at each layer <span class="math inline">\(k\in\{0,\dots,K\}\)</span>.</p>
 
 <img data-src="../img/UDL/Chap07/Train2BP3.svg" class="quarto-figure quarto-figure-center r-stretch"><p><span class="math display">\[\begin{align*}
-\frac{\partial l_i}{\partial \mathbf{\Omega}_k} = \frac{\partial l_i}{\partial\mathbf{f}_k} \frac{\partial \mathbf{f}_k}{\partial \mathbf{\Omega}_k} =   \frac{\partial\mathbf{h}_{k+1}}{\partial \mathbf{f}_k} \frac{\partial\mathbf{f}_{k+1}}{\partial\mathbf{h}_{k+1}} \frac{\partial l_i}{\partial\mathbf{f}_{k+1}} \mathbf{h}_k^T
-\end{align*}\]</span> where activation <span class="math inline">\(\mathbf{h}_{k+1}\)</span> results from pre-activation <span class="math inline">\(\mathbf{f}_{k}\)</span>.</p>
+\frac{\partial l_i}{\partial \mathbf{\Omega}_k}
+=  \underset{\frac{\partial l_i}{\partial\mathbf{f}_k}}{\underbrace{\frac{\partial l_i}{\partial\mathbf{f}_{k+1}}   \frac{\partial\mathbf{f}_{k+1}}{\partial\mathbf{h}_{k+1}} \frac{\partial\mathbf{h}_{k+1}}{\partial \mathbf{f}_k}}} \underset{\mathbf{h}_k^T}{\underbrace{ \frac{\partial \mathbf{f}_k}{\partial \mathbf{\Omega}_k} }}
+=  \frac{\partial l_i}{\partial\mathbf{f}_{k+2}}   \frac{\partial\mathbf{f}_{k+2}}{\partial\mathbf{h}_{k+2}} \frac{\partial\mathbf{h}_{k+2}}{\partial \mathbf{f}_{k+1}}\frac{\partial\mathbf{f}_{k+1}}{\partial\mathbf{h}_{k+1}} \frac{\partial\mathbf{h}_{k+1}}{\partial \mathbf{f}_k}\mathbf{h}_k^T
+\end{align*}\]</span></p>
 </section>
 <section id="forward-pass" class="slide level2">
 <h2>Forward Pass</h2>
@@ -377,7 +379,7 @@ y_j &amp;= \phi_{j0} + \sum_{d=1}^{D} \phi_{jd} \underset{h_d}{\underbrace{a(\th
 <img data-src="4_neuralNetworks_files/figure-revealjs/cell-2-output-1.png" class="r-stretch"></section>
 <section id="neural-network-implementation" class="slide level2">
 <h2>Neural Network Implementation</h2>
-<div id="e6bc946d" class="cell" data-execution_count="3">
+<div id="f6bf2eff" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href=""></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href=""></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href=""></a></span>
@@ -433,18 +435,18 @@ y_j &amp;= \phi_{j0} + \sum_{d=1}^{D} \phi_{jd} \underset{h_d}{\underbrace{a(\th
   )
 )
 Sample input:
- tensor([[ 0.9610, -0.4991],
-        [ 0.8780, -0.3601],
-        [-1.0799,  0.1594],
-        [ 0.8342,  0.3770],
-        [ 0.5005, -0.5789]], device='mps:0')
+ tensor([[-0.2049,  1.1050],
+        [ 0.7552, -0.5499],
+        [-0.1418,  1.1194],
+        [-0.0378,  0.8320],
+        [ 0.5332,  0.6654]], device='mps:0')
 
 Network output:
- tensor([[ 0.1133, -0.0112],
-        [ 0.1046, -0.0326],
-        [ 0.3253, -0.3412],
-        [ 0.0842, -0.0987],
-        [ 0.1533, -0.0335]], device='mps:0', grad_fn=&lt;LinearBackward0&gt;)
+ tensor([[ 0.7900, -0.0902],
+        [ 0.5022,  0.0599],
+        [ 0.7991, -0.0914],
+        [ 0.7038, -0.1001],
+        [ 0.6856, -0.1230]], device='mps:0', grad_fn=&lt;LinearBackward0&gt;)
 
 Predicted labels:
  tensor([0, 0, 0, 0, 0], device='mps:0')</code></pre>
@@ -453,24 +455,24 @@ Predicted labels:
 </section>
 <section id="training" class="slide level2">
 <h2>Training</h2>
-<div id="d720fb00" class="cell" data-execution_count="4">
+<div id="c6dd7171" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href=""></a>losses <span class="op">=</span> model.train(X, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 0 loss is 0.6564172506332397
-Epoch 1000 loss is 0.28181493282318115
-Epoch 2000 loss is 0.2414126992225647
-Epoch 3000 loss is 0.2243497371673584
-Epoch 4000 loss is 0.21077106893062592
-Epoch 5000 loss is 0.197674959897995
-Epoch 6000 loss is 0.18398109078407288
-Epoch 7000 loss is 0.16948094964027405
-Epoch 8000 loss is 0.15426474809646606
-Epoch 9000 loss is 0.13909949362277985
-Epoch 10000 loss is 0.1247006431221962
-Epoch 11000 loss is 0.11129634082317352
-Epoch 12000 loss is 0.09911473095417023
-Epoch 13000 loss is 0.08828072249889374
-Epoch 14000 loss is 0.07882219552993774</code></pre>
+<pre><code>Epoch 0 loss is 0.7221612930297852
+Epoch 1000 loss is 0.27950406074523926
+Epoch 2000 loss is 0.24892622232437134
+Epoch 3000 loss is 0.2347331941127777
+Epoch 4000 loss is 0.22433272004127502
+Epoch 5000 loss is 0.2131991982460022
+Epoch 6000 loss is 0.2003837525844574
+Epoch 7000 loss is 0.1849856972694397
+Epoch 8000 loss is 0.16728699207305908
+Epoch 9000 loss is 0.1484847515821457
+Epoch 10000 loss is 0.12948602437973022
+Epoch 11000 loss is 0.11162294447422028
+Epoch 12000 loss is 0.09596933424472809
+Epoch 13000 loss is 0.08286705613136292
+Epoch 14000 loss is 0.07198813557624817</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -488,7 +490,7 @@ Epoch 14000 loss is 0.07882219552993774</code></pre>
 </section>
 <section id="another-example" class="slide level2">
 <h2>Another Example</h2>
-<div id="71d36720" class="cell" data-execution_count="6">
+<div id="ef14f8dd" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href=""></a><span class="im">import</span> torch, torch.nn <span class="im">as</span> nn</span>
 <span id="cb5-2"><a href=""></a><span class="im">from</span> torch.utils.data <span class="im">import</span> TensorDataset, DataLoader</span>
 <span id="cb5-3"><a href=""></a><span class="im">from</span> torch.optim.lr_scheduler <span class="im">import</span> StepLR</span>
@@ -542,7 +544,7 @@ Epoch 14000 loss is 0.07882219552993774</code></pre>
 <span id="cb5-51"><a href=""></a><span class="co"># tell scheduler to consider updating learning rate</span></span>
 <span id="cb5-52"><a href=""></a>scheduler.step()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch    99, loss 4.419</code></pre>
+<pre><code>Epoch    99, loss 2.451</code></pre>
 </div>
 </div>
 </section>
