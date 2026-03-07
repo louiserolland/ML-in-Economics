@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="6_generativeAI_files/libs/clipboard/clipboard.min.js"></script>
+<script src="6_generativeAI_files/libs/quarto-html/tabby.min.js"></script>
+<script src="6_generativeAI_files/libs/quarto-html/popper.min.js"></script>
+<script src="6_generativeAI_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="6_generativeAI_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="6_generativeAI_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="6_generativeAI_files/libs/quarto-html/quarto-syntax-highlighting-dark-9a023c9ade86a60361e96e3e3f11bc54.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <meta name="author" content="Stefan Bucher">
+  <title>Lecture 6: Generative Models</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="6_generativeAI_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="6_generativeAI_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="6_generativeAI_files/libs/revealjs/dist/theme/quarto-83584a8c895bd4441fa23ab377ed197b.css">
+  <link rel="stylesheet" href="../auxiliary/slidestyle.css">
+  <link href="6_generativeAI_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="6_generativeAI_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="6_generativeAI_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="6_generativeAI_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="../img/cam.png" data-background-opacity="0.55" data-background-position="50% 85%" data-background-size="contain" class="quarto-title-block center">
+  <h1 class="title">Lecture 6: Generative Models</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Stefan Bucher 
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide level2 scrollable">
+
+<p><a href="https://colab.research.google.com/github/MLecon/ML-in-Economics/blob/main/5_generativeAI.ipynb" target="_blank"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"> </a></p>
+<p><span class="citation" data-cites="prince2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023, chaps. 12, 14, 17, 18</a>)</span>.<sup>1</sup></p>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Figures taken or adapted from <span class="citation" data-cites="prince2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span>. All rights belong to the original author and publisher. These materials are intended solely for educational purposes.</p></li></ol></aside></section>
+<section>
+<section id="generative-pre-trained-transformer-gpt-models" class="title-slide slide level1 center">
+<h1>Generative Pre-Trained Transformer (GPT) Models</h1>
+<p><span class="citation" data-cites="prince2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023, chaps. 12.7–12.10</a>)</span></p>
+</section>
+<section id="decoder-model-gpt3" class="slide level2">
+<h2>Decoder Model: GPT3</h2>
+<ul>
+<li class="fragment">Decoder aims to generate next token in a sentence.</li>
+<li class="fragment">Autoregressive language model is generative: It predicts <span class="math inline">\(P(t_n|t_1,\dots,t_{n-1})\)</span> aiming to maximize likelihood of observed text.</li>
+<li class="fragment">Masked self-attention allows passing whole sentence at once without forward-looking. Generating is efficient because prior embeddings do not depend on subsequent ones.</li>
+<li class="fragment">Few-shot learning: GPT3 can learn new tasks based on a few examples without much fine-tuning.</li>
+</ul>
+</section>
+<section id="decoder-model-gpt3-1" class="slide level2">
+<h2>Decoder Model: GPT3</h2>
+
+<img data-src="../img/UDL/Chap12/TransformerDecoder.svg" class="quarto-figure quarto-figure-center r-stretch"><p>Large language models (LLM) apply idea on massive scale.</p>
+<p>Vocabulary size: 12288-dim. word embeddings; 96 transformer layers (96 heads, <span class="math inline">\(D_q=128\)</span>), 175 billion parameters, trained on 300 billion tokens.</p>
+</section>
+<section id="encoder-decoder-model-machine-translation" class="slide level2">
+<h2>Encoder-Decoder Model: Machine Translation</h2>
+
+<img data-src="../img/UDL/Chap12/TransformerEncoderDecoder.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="cross-attention" class="slide level2">
+<h2>Cross-Attention</h2>
+
+<img data-src="../img/UDL/Chap12/TransformerBlockSACross.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="long-sequences" class="slide level2">
+<h2>Long Sequences</h2>
+
+<img data-src="../img/UDL/Chap12/TransformerLongRange.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="transformers-for-images" class="slide level2">
+<h2>Transformers for Images</h2>
+<ul>
+<li class="fragment">ImageGPT applies transformers to image patches.</li>
+<li class="fragment">Vision Transformer (ViT) applies self-attention to image patches.</li>
+<li class="fragment">Multi-scale vision transformers</li>
+</ul>
+</section></section>
+<section>
+<section id="unsupervised-learning" class="title-slide slide level1 center">
+<h1>Unsupervised Learning</h1>
+<p><span class="citation" data-cites="prince2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023, chap. 14</a>)</span></p>
+</section>
+<section id="taxonomy" class="slide level2">
+<h2>Taxonomy</h2>
+
+<img data-src="../img/UDL/Chap14/UnsupOverview.svg" class="quarto-figure quarto-figure-center r-stretch"><p>Either map</p>
+<ul>
+<li class="fragment">from observed <span class="math inline">\(x\)</span> to latent variables <span class="math inline">\(z\)</span></li>
+<li class="fragment">from latent variables <span class="math inline">\(z\)</span> to observed <span class="math inline">\(x\)</span> (generative models)</li>
+</ul>
+</section>
+<section id="probabilisitc-generative-models" class="slide level2">
+<h2>Probabilisitc Generative Models</h2>
+<p><span class="math display">\[\begin{align*}
+\min_{\phi} -\sum_{i=1}^I \log Pr(x_i|\phi)
+\end{align*}\]</span></p>
+</section>
+<section id="generative-model-properties" class="slide level2">
+<h2>Generative Model Properties</h2>
+
+<img data-src="../img/UDL/Chap14/generativeModelProperties.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+</section>
+<section>
+<section id="variational-autoencoders-vae" class="title-slide slide level1 center">
+<h1>Variational Autoencoders (VAE)</h1>
+<p><span class="citation" data-cites="prince2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023, chap. 17</a>)</span></p>
+</section>
+<section id="latent-variable-models" class="slide level2">
+<h2>Latent Variable Models</h2>
+<p><span class="math display">\[\begin{align*}
+P(\mathbf{x}) = \int P(\mathbf{x}|\mathbf{z})P(\mathbf{z})d\mathbf{z}
+\end{align*}\]</span></p>
+
+<img data-src="../img/UDL/Chap17/VAEMixGauss.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="nonlinear-latent-variable-model" class="slide level2">
+<h2>Nonlinear Latent Variable Model</h2>
+<p>VAEs aim to represent <span class="math inline">\(P(\mathbf{x})\)</span> with nonlinear latent variable model <span class="math display">\[\begin{align*}
+P(\mathbf{z}) &amp;= \mathcal{N}_{\mathbf{z}}(0,\mathbf{I})\\
+P(\mathbf{x}|\mathbf{z},\phi) &amp;= \mathcal{N}_{\mathbf{x}}(f[\mathbf{z},\phi],\sigma^2 \mathbf{I})
+\end{align*}\]</span> where <span class="math inline">\(f[z,\phi]\)</span> will be the decoder network.</p>
+
+<img data-src="../img/UDL/Chap17/VAENonLinearLVM.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="generation-ancestral-sampling" class="slide level2">
+<h2>Generation: Ancestral Sampling</h2>
+
+<img data-src="../img/UDL/Chap17/VAENonLinearLVMGen.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="maximizing-log-likelihood-evidence" class="slide level2">
+<h2>Maximizing Log-Likelihood (Evidence)</h2>
+<p><span class="math display">\[\begin{align*}
+\hat{\phi} &amp;= \arg\max_{\phi} \sum_{i=1}^I \log P(\mathbf{x}_i|\phi) \\
+&amp;= \arg\max_{\phi} \sum_{i=1}^I \log \left( \int \mathcal{N}_{\mathbf{x}_i}(f[\mathbf{z},\phi],\sigma^2 \mathbf{I})\mathcal{N}_{\mathbf{z}}(0,\mathbf{I})d\mathbf{z} \right)
+\end{align*}\]</span></p>
+<p>Intractable integral prevents maximum likelihood learning.</p>
+</section>
+<section id="evidence-lower-bound-elbo-on-log-likelihood" class="slide level2">
+<h2>Evidence Lower Bound (ELBO) on Log-Likelihood</h2>
+<p><span class="math display">\[\begin{align*}
+\log(P(\mathbf{x}|\phi))
+&amp;= \log\left(\int q(\mathbf{z}|\theta) \frac{P(\mathbf{x},\mathbf{z}|\phi)}{q(\mathbf{z}|\theta)} d\mathbf{z} \right) \\
+&amp;\geq \int q(\mathbf{z}|\theta) \log\left(\frac{P(\mathbf{x},\mathbf{z}|\phi)}{q(\mathbf{z}|\theta)}\right) d\mathbf{z}
+=: ELBO(\theta,\phi)
+\end{align*}\]</span> due to Jensen’s inequality. <span class="math inline">\(\theta\)</span> parametrizes lower bound.</p>
+</section>
+<section id="jensens-inequality" class="slide level2">
+<h2>Jensen’s Inequality</h2>
+
+<img data-src="../img/UDL/Chap17/VAEJensen.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="elbo-log-likelihood-kl-div.-to-posterior" class="slide level2">
+<h2>ELBO = Log-Likelihood – KL-Div. to Posterior</h2>
+<p><span class="math display">\[\begin{align*}
+ELBO(\theta,\phi)
+&amp;= \int q(\mathbf{z}|\theta) \log\left(\frac{P(\mathbf{z}|\mathbf{x},\phi)P(\mathbf{x}|\phi)}{q(\mathbf{z}|\theta)}\right) d\mathbf{z} \\
+&amp;= \int q(\mathbf{z}|\theta) \log(P(\mathbf{x}|\phi)) d\mathbf{z} + \int q(\mathbf{z}|\theta) \log\left(\frac{P(\mathbf{z}|\mathbf{x},\phi)}{q(\mathbf{z}|\theta)}\right) d\mathbf{z} \\
+&amp;= \log(P(\mathbf{x}|\phi)) - D_{KL}(q(\mathbf{z}|\theta)||P(\mathbf{z}|\mathbf{x},\phi))
+\end{align*}\]</span> Maximizing w.r.t. <span class="math inline">\(\theta\)</span> (encoder) tightens bound, pushing towards <span class="math inline">\(q(\mathbf{z}|\theta)\approxeq P(\mathbf{z}|\mathbf{x},\phi)\)</span>.</p>
+<p>Maximizing w.r.t. <span class="math inline">\(\phi\)</span> (decoder) maximizes on that bound.</p>
+
+<img data-src="../img/UDL/Chap17/VAEELBO.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="variational-approximation" class="slide level2">
+<h2>Variational Approximation</h2>
+<p>Posterior <span class="math display">\[\begin{align*}
+P(\mathbf{z}|\mathbf{x},\phi) = \frac{P(\mathbf{x}|\mathbf{z},\phi)P(\mathbf{z})}{P(\mathbf{x}|\phi)}
+\end{align*}\]</span> also intractable (<span class="math inline">\(P(\mathbf{x}|\phi)\)</span>) but variational approximation with parametric <span class="math inline">\(q(\mathbf{z}|\mathbf{x},\theta)\)</span>, e.g.&nbsp;<span class="math inline">\(q(\mathbf{z}|\mathbf{x},\theta)=\mathcal{N}_{\mathbf{z}}(\mathbf{g}_{\mathbf{\mu}}[\mathbf{x},\mathbf{\theta}], \mathbf{g}_{\mathbf{\Sigma}}[\mathbf{x},\mathbf{\theta}])\)</span>.</p>
+
+<img data-src="../img/UDL/Chap17/VAEVariational.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="posterior-distribution-over-latent-variable" class="slide level2">
+<h2>Posterior Distribution over Latent Variable</h2>
+
+<img data-src="../img/UDL/Chap17/VAENonLinearLVMPost2.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="elbo-reconstr.-loss-kl-div.-to-prior" class="slide level2">
+<h2>ELBO = Reconstr. Loss – KL-Div. to Prior</h2>
+<p><span class="math display">\[\begin{align*}
+&amp; ELBO(\theta,\phi)
+= \int q(\mathbf{z}|\theta) \log\left(\frac{P(\mathbf{x}|\mathbf{z},\phi)P(\mathbf{z})}{q(\mathbf{z}|\theta)}\right) d\mathbf{z} \\
+&amp;= \int q(\mathbf{z}|\theta) \log(P(\mathbf{x}|\mathbf{z},\phi)) d\mathbf{z} + \int q(\mathbf{z}|\theta) \log\left(\frac{P(\mathbf{z})}{q(\mathbf{z}|\theta)}\right) d\mathbf{z} \\
+&amp;= \int q(\mathbf{z}|\theta) \log(P(\mathbf{x}|\mathbf{z},\phi)) d\mathbf{z} - D_{KL}(q(\mathbf{z}|\theta)||P(\mathbf{z}))
+\end{align*}\]</span> where the first term measures reconstruction loss (how well latent variable reconstructs data).</p>
+</section>
+<section id="variational-autoencoder-vae" class="slide level2 scrollable">
+<h2>Variational Autoencoder (VAE)</h2>
+<p>Encoder network computing mean &amp; variance of the variational posterior <span class="math display">\[\begin{align*}
+q(\mathbf{z}|\mathbf{x},\theta) = \mathcal{N}_{\mathbf{z}}(\mathbf{g}_{\mathbf{\mu}}[\mathbf{x},\mathbf{\theta}], \mathbf{g}_{\mathbf{\Sigma}}[\mathbf{x},\mathbf{\theta}])
+\end{align*}\]</span> permits computing and maximizing<sup>1</sup> (w.r.t. <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\theta\)</span>) the ELBO (for data <span class="math inline">\(\mathbf{x}\)</span>) <span class="math display">\[\begin{align*}
+ELBO(\phi,\theta)
+&amp;= \int q(\mathbf{z}|\mathbf{x},\theta) \log(P(\mathbf{x}|\mathbf{z},\phi)) d\mathbf{z} - D_{KL}(q(\mathbf{z}|\mathbf{x},\theta)||P(\mathbf{z})) \\
+&amp;\approxeq  \log(P(\mathbf{x}|\mathbf{z}^*,\phi)) -\frac{1}{2} \left(tr(\mathbf{\Sigma}) + \mathbf{\mu}^T\mathbf{\mu} - D_{\mathbf{z}} -\log |\mathbf{\Sigma}| \right)
+\end{align*}\]</span> where <span class="math inline">\(\mathbf{z}^* \sim q(\mathbf{z}|\mathbf{x},\theta)\)</span> serves as a (crude) Monte Carlo estimate of the expectation, and <span class="math inline">\(D_{\mathbf{z}}\)</span> is the latent space dimension. Recall that <span class="math display">\[\begin{align*}
+P(\mathbf{x}|\mathbf{z}^*,\phi) &amp;= \mathcal{N}_{\mathbf{x}}(f[\mathbf{z}^*,\phi],\sigma^2 \mathbf{I})
+\end{align*}\]</span> is determined by decoder network <span class="math inline">\(f[\mathbf{z}^*,\phi]\)</span>.</p>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>Optimization as usual with SGD/Adam using gradients of ELBO w.r.t. <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\theta\)</span>.</p></li></ol></aside></section>
+<section id="simultaneous-optimization-of-theta-and-phi" class="slide level2">
+<h2>Simultaneous Optimization of <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\phi\)</span></h2>
+
+<img data-src="../img/UDL/Chap17/VAEOpt.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="vae-architecture" class="slide level2">
+<h2>VAE Architecture</h2>
+
+<img data-src="../img/UDL/Chap17/VAEArch.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="reparametrization-trick" class="slide level2">
+<h2>Reparametrization Trick</h2>
+<p>To allow backprop, compute sample as <span class="math display">\[\begin{align*}
+\mathbf{z}^* &amp;= \mathbf{\mu} + \mathbf{\Sigma}^{1/2} \mathbf{\varepsilon}^*\\
+\mathbf{\varepsilon}^* &amp;\sim \mathcal{N}_{\mathbf{\varepsilon}}(0,\mathbf{I})
+\end{align*}\]</span> which is differentiable w.r.t. <span class="math inline">\(\theta\)</span> (i.e.&nbsp;<span class="math inline">\(\mathbf{\mu}\)</span> and <span class="math inline">\(\mathbf{\Sigma}\)</span>; backprop need not pass down stochastic branch).</p>
+
+<img data-src="../img/UDL/Chap17/VAEReparam.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="approxmating-sample-probability-with-importance-sampling" class="slide level2">
+<h2>Approxmating Sample Probability with Importance Sampling</h2>
+<p><span class="math display">\[\begin{align*}
+P(\mathbf{x}) &amp;= \int P(\mathbf{x}|\mathbf{z})P(\mathbf{z})d\mathbf{z} \\
+&amp;= \int \frac{P(\mathbf{x}|\mathbf{z})P(\mathbf{z})}{q(\mathbf{z})} q(\mathbf{z}) d\mathbf{z} \\
+&amp;= \mathbb{E}_{q(\mathbf{z})} \left[ \frac{P(\mathbf{x}|\mathbf{z})P(\mathbf{z})}{q(\mathbf{z})} \right]\\
+&amp;\approxeq \frac{1}{N} \sum_{n=1}^N \frac{P(\mathbf{x}|\mathbf{z}_n)P(\mathbf{z}_n)}{q(\mathbf{z}_n)}
+\end{align*}\]</span> where sampling <span class="math inline">\(\mathbf{z}_n \sim q(\cdot|\mathbf{x},\theta)\)</span> from the variational posterior promises efficient sampling.</p>
+<p>With sufficient samples, this may provide better estimate than lower bound.</p>
+</section>
+<section id="application-generation" class="slide level2">
+<h2>Application: Generation</h2>
+
+<img data-src="../img/UDL/Chap17/VAEGen.svg" class="white-background quarto-figure quarto-figure-center r-stretch"><p>High-quality generation by sampling from aggregated posterior <span class="math inline">\(q(\mathbf{z}|\theta)\)</span>, using hierarchical priors and specialized architectures/regularization.</p>
+</section>
+<section id="application-resynthesis" class="slide level2">
+<h2>Application: Resynthesis</h2>
+
+<img data-src="../img/UDL/Chap17/VAESmile.svg" class="white-background quarto-figure quarto-figure-center r-stretch"><p>Vector in latent space representing smiling/open mouth estimated as difference between the mean <span class="math inline">\(\mathbf{z}\)</span> across the two (labelled) groups. Real data can then be modified by taking steps in latent space.</p>
+</section>
+<section id="application-disentanglement" class="slide level2">
+<h2>Application: Disentanglement</h2>
+<p>Aims for coordinate directions to correspond to real-world properties, often by regularization <span class="math display">\[\begin{align*}
+L = - ELBO(\theta,\phi) + \lambda_1\mathbb{E}_{P(\mathbf{x})}[r_1[q(\mathbf{z}|\mathbf{x},\theta)]] + \lambda_2 r_2\left[\frac{1}{N}\sum_{n=1}^N q(\mathbf{z}|\mathbf{x}_i,\theta)\right]
+\end{align*}\]</span></p>
+
+<img data-src="../img/UDL/Chap17/VAEDisentangle.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="beta-vae" class="slide level2">
+<h2><span class="math inline">\(\beta\)</span>-VAE</h2>
+<p><span class="math display">\[\begin{align*}
+ELBO(\theta,\phi) \approxeq \log P(\mathbf{x}|\mathbf{z}^*,\phi)  - \beta D_{KL}(q(\mathbf{z}|\mathbf{x},\theta)||P(\mathbf{z}))
+\end{align*}\]</span></p>
+<p>With spherical prior <span class="math inline">\(P(\mathbf{z}\)</span>, <span class="math inline">\(\beta&gt;1\)</span> encourages disentanglement by encouraging less correlated posterior.</p>
+</section></section>
+<section>
+<section id="diffusion-models" class="title-slide slide level1 center">
+<h1>Diffusion Models</h1>
+<p><span class="citation" data-cites="prince2023">Prince (<a href="#/references" role="doc-biblioref" onclick="">2023, chap. 18</a>)</span></p>
+</section>
+<section id="diffusion-models-1" class="slide level2">
+<h2>Diffusion Models</h2>
+
+<img data-src="../img/UDL/Chap18/DiffusionOverview.svg" class="white-background quarto-figure quarto-figure-center r-stretch"><ul>
+<li class="fragment">Goal is to learn decoder that is inverse of a <em>predetermined</em> encoder.</li>
+<li class="fragment">Loss function encourages each network to invert the corresponding encoder step.</li>
+<li class="fragment">Can be viewed as (special case of) VAEs with hierarchical priors.</li>
+</ul>
+</section>
+<section id="encoder-forwarddiffusion-process" class="slide level2">
+<h2>Encoder (Forward/Diffusion Process)</h2>
+<p>Markov chain <span class="math display">\[\begin{align*}
+q(\mathbf{z}_1|\mathbf{x}) &amp;= \mathcal{N}_{\mathbf{z}_1} \left( \sqrt{1-\beta_1} \mathbf{x}, \beta_1 \mathbf{I}\right) \\
+q(\mathbf{z}_t|\mathbf{z}_{t-1}) &amp;= \mathcal{N}_{\mathbf{z}_t} \left( \sqrt{1-\beta_t} \mathbf{z}_{t-1}, \beta_t \mathbf{I} \right)  \qquad \forall t \in 2,\dots, T
+\end{align*}\]</span> where <span class="math inline">\(\beta_t\)</span> determine the noise schedule.</p>
+
+<img data-src="../img/UDL/Chap18/DiffusionForward2.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="diffusion-kernel-qmathbfz_tmathbfx" class="slide level2">
+<h2>Diffusion Kernel <span class="math inline">\(q(\mathbf{z}_t|\mathbf{x})\)</span></h2>
+<p><span class="math display">\[\begin{align*}
+q(\mathbf{z}_t|\mathbf{x}) = \mathcal{N}_{\mathbf{z}_t} \left( \sqrt{\alpha_t} \mathbf{x}, (1-\alpha_t) \mathbf{I} \right)
+\end{align*}\]</span> where <span class="math inline">\(\alpha_t = \prod_{s=1}^t (1-\beta_s)\)</span>.</p>
+
+<img data-src="../img/UDL/Chap18/DiffusionKernel.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="marginal-distributions-qmathbfz_t" class="slide level2">
+<h2>Marginal Distributions <span class="math inline">\(q(\mathbf{z}_t)\)</span></h2>
+<p><span class="math display">\[\begin{align*}
+q(\mathbf{z}_t) = \int q(\mathbf{z}_t|\mathbf{x}) P(\mathbf{x}) d\mathbf{x}
+\end{align*}\]</span> where <span class="math inline">\(P(\mathbf{x})\)</span> not explicitly known.</p>
+
+<img data-src="../img/UDL/Chap18/DiffusionDensity.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="conditional-distribution-qmathbfz_t-1mathbfz_t" class="slide level2">
+<h2>Conditional Distribution <span class="math inline">\(q(\mathbf{z}_{t-1}|\mathbf{z}_t)\)</span></h2>
+<p><span class="math display">\[\begin{align*}
+q(\mathbf{z}_{t-1}|\mathbf{z}_t) = \frac{q(\mathbf{z}_t|\mathbf{z}_{t-1})q(\mathbf{z}_{t-1})}{q(\mathbf{z}_t)}
+\end{align*}\]</span> is intractable because of the unknown marginals, but often well-approximated by normal distribution.</p>
+
+<img data-src="../img/UDL/Chap18/DiffusionReverse.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="cond.-diffusion-distribution-qmathbfz_t-1mathbfz_tmathbfx" class="slide level2">
+<h2>Cond. Diffusion Distribution <span class="math inline">\(q(\mathbf{z}_{t-1}|\mathbf{z}_t,\mathbf{x})\)</span></h2>
+<p>Conditional on <span class="math inline">\(\mathbf{x}\)</span> we <em>do</em> have closed form <span class="math display">\[\begin{align*}
+q(\mathbf{z}_{t-1}|\mathbf{z}_t,\mathbf{x}) = \mathcal{N}_{\mathbf{z}_{t-1}} \left( \frac{1-\alpha_{t-1}}{1-\alpha_t}\sqrt{1-\beta_t}\mathbf{z}_t+\frac{\sqrt{\alpha_{t-1}}\beta_t}{1-\alpha_t}\mathbf{x}, \frac{\beta_t(1-\alpha_{t-1})}{1-\alpha_t} \mathbf{I} \right)
+\end{align*}\]</span> which will be used to train decoder.</p>
+
+<img data-src="../img/UDL/Chap18/DiffusionReverseConditional.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="decoder-reverse-process" class="slide level2">
+<h2>Decoder (Reverse Process)</h2>
+<p>Given diffusion process, learn reverse process (approximating <span class="math inline">\(q(\mathbf{z}_{t-1}|\mathbf{z}_t)\)</span> with normal distributions) <span class="math display">\[\begin{align*}
+P(\mathbf{z}_T) &amp;= \mathcal{N}_{\mathbf{z}_T}(0,\mathbf{I}) \\
+P(\mathbf{z}_{t-1}|\mathbf{z}_t,\phi_t) &amp;= \mathcal{N}_{\mathbf{z}_{t-1}} \left( \mathbf{f}_t[\mathbf{z}_t,\mathbf{\phi}_t], \sigma_t^2 \mathbf{I} \right) \\
+P(\mathbf{x}|\mathbf{z}_1,\phi_1) &amp;= \mathcal{N}_{\mathbf{x}} \left( \mathbf{f}_1[\mathbf{z}_1,\mathbf{\phi}_1], \sigma_1^2 \mathbf{I} \right)
+\end{align*}\]</span> Can generate from <span class="math inline">\(P(\mathbf{x})\)</span> using ancestral sampling.</p>
+</section>
+<section id="deriving-elbo-diffusion-loss" class="slide level2">
+<h2>Deriving ELBO &amp; Diffusion Loss</h2>
+<p><span class="math display">\[\begin{align*}
+\hat{\phi}_{1,\dots,T} &amp;= \arg\max_{\phi_{1,\dots,T}} \sum_{i=1}^I \log P(\mathbf{x}_i|\phi_{1,\dots,T}) \\
+&amp;= \arg\max_{\phi_{1,\dots,T}} \sum_{i=1}^I \log \left( \int P(\mathbf{x},\mathbf{z}_{1,\dots,T}|\phi_{1,\dots,T})  d\mathbf{z}_{1,\dots,T} \right)
+\end{align*}\]</span> The marginalization renders max-likelihood intractable, so we derive ELBO where encoder distribution <span class="math inline">\(q(\mathbf{z}_{1,\dots,T}|\mathbf{x})\)</span> is now predetermined (no <span class="math inline">\(\theta\)</span>). Decoder chooses <span class="math inline">\(\phi\)</span> to simultaneously tighten bound (so static encoder approximates <span class="math inline">\(P(\mathbf{z}_{1,\dots,T}|\mathbf{x},\phi_{1,\dots,T})\)</span>) and optimize with respect to it.</p>
+<p><span class="math display">\[\begin{align*}
+&amp; \log(P(\mathbf{x}|\phi_{1,\dots,T})) \\
+&amp;= \log\left(\int q(\mathbf{z}_{1,\dots,T}|\mathbf{x}) \frac{P(\mathbf{x},\mathbf{z}_{1,\dots,T}|\phi_{1,\dots,T})}{q(\mathbf{z}_{1,\dots,T}|\mathbf{x})} d\mathbf{z}_{1,\dots,T} \right) \\
+&amp;\geq \int q(\mathbf{z}_{1,\dots,T}|\mathbf{x}) \log\left(\frac{P(\mathbf{x},\mathbf{z}_{1,\dots,T}|\phi_{1,\dots,T})}{q(\mathbf{z}_{1,\dots,T}|\mathbf{x})}\right) d\mathbf{z}_{1,\dots,T}
+=: ELBO(\phi_{1,\dots,T})\\
+&amp;= \int q(\mathbf{z}_{1,\dots,T}|\mathbf{x}) \left[\log\left(\frac{P(\mathbf{x}|\mathbf{z}_1,\phi_1)}{q(\mathbf{z}_1|\mathbf{x})}\right) + \log\left(\frac{\prod_{t=2}^T P(\mathbf{z}_{t-1}|\mathbf{z}_t,\phi_t)}{\prod_{t=2}^T \frac{q(\mathbf{z}_{t-1}|\mathbf{z}_{t},\mathbf{x})q(\mathbf{z}_t|\mathbf{x})}{q(\mathbf{z}_{t-1}|\mathbf{x})}}\right) + \log\left(P(\mathbf{z}_T)\right) \right] d\mathbf{z}_{1,\dots,T} \\
+&amp;= \int q(\mathbf{z}_{1,\dots,T}|\mathbf{x}) \left[\log\left(P(\mathbf{x}|\mathbf{z}_1,\phi_1)\right) + \sum_{t=2}^T \log\left(\frac{ P(\mathbf{z}_{t-1}|\mathbf{z}_t,\phi_t)}{q(\mathbf{z}_{t-1}|\mathbf{z}_{t},\mathbf{x})}\right) + \underset{\approxeq 0}{\underbrace{\log\left(\frac{P(\mathbf{z}_T)}{q(\mathbf{z}_T|\mathbf{x})} \right) }}\right] d\mathbf{z}_{1,\dots,T} \\
+&amp;\approxeq \mathbb{E}_{q(\mathbf{z}_1|\mathbf{x})}[\log(P(\mathbf{x}|\mathbf{z}_1,\phi_1))] - \sum_{t=2}^T \mathbb{E}_{q(\mathbf{z}_t|\mathbf{x})}[D_{KL}(q(\mathbf{z}_{t-1}|\mathbf{z}_t,\mathbf{x})||P(\mathbf{z}_{t-1}|\mathbf{z}_t,\phi_t))]
+\end{align*}\]</span> which results in minimization of the diffusion loss function (again using MC) <span class="math display">\[\begin{align*}
+\min_{\phi_{1,\dots,T}} \sum_{i=1}^I \left[-\log\left(\mathcal{N}_{\mathbf{x}_i}(\mathbf{f}_1[\mathbf{z}_{i1},\phi_1], \sigma_1^2 \mathbf{I})\right) + \sum_{t=2}^T \frac{1}{2\sigma_t^2} \left|\left| \frac{1-\alpha_{t-1}}{1-\alpha_t}\sqrt{1-\beta_t}\mathbf{z}_{it} + \frac{\sqrt{\alpha_{t-1}}\beta_t}{1-\alpha_t}\mathbf{x}_i - \mathbf{f}_t[\mathbf{z}_{it},\phi_t] \right|\right|^2 \right]
+\end{align*}\]</span> where <span class="math inline">\(\mathbf{z}_{it}\)</span> is the latent var. correspond. to datapoint <span class="math inline">\(\mathbf{x}_i\)</span> at diffusion step <span class="math inline">\(t\)</span>.</p>
+</section>
+<section id="reparametrized-loss-function" class="slide level2">
+<h2>Reparametrized Loss Function</h2>
+<p>Since <span class="math inline">\(\mathbf{z}_t = \sqrt{\alpha_t}\mathbf{x} + \sqrt{1-\alpha_t}\mathbf{\varepsilon}_t\)</span> we use model <span class="math inline">\(\hat{\varepsilon} = \mathbf{g}_t[\mathbf{z}_t,\phi_t]\)</span> predicting noise (instead of predicting <span class="math inline">\(\hat{\mathbf{z}}_{t-1} = \mathbf{f}_t[\mathbf{z}_t, \phi_t]\)</span>) and minimize <span class="math display">\[\begin{align*}
+\min_{\phi_{1,\dots,T}} \sum_{i=1}^I \sum_{t=1}^T \left|\left| \mathbf{g}_t[\underset{\mathbf{z}_{it}}{\underbrace{ \sqrt{\alpha_t}\mathbf{x}_i + \sqrt{1-\alpha_t}\mathbf{\varepsilon}_{it}}},\phi_t] - \mathbf{\varepsilon}_{it} \right|\right|^2
+\end{align*}\]</span></p>
+</section>
+<section id="fitted-reverse-process" class="slide level2">
+<h2>Fitted Reverse Process</h2>
+
+<img data-src="../img/UDL/Chap18/DiffusionPredict.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="application-to-images" class="slide level2">
+<h2>Application to Images</h2>
+
+<img data-src="../img/UDL/Chap18/DiffusionUNet.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+</section>
+<section id="references" class="title-slide slide level1 smaller scrollable">
+<h1>References</h1>
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-prince2023" class="csl-entry" role="listitem">
+Prince, Simon J. D. 2023. <em>Understanding Deep Learning</em>. Cambridge, Massachusetts: The MIT Press.
+</div>
+</div>
+</section>
+
+
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="resources/logoinv.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>Stefan Bucher</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="6_generativeAI_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="6_generativeAI_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="6_generativeAI_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="6_generativeAI_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="6_generativeAI_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="6_generativeAI_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="6_generativeAI_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="6_generativeAI_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="6_generativeAI_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="6_generativeAI_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
