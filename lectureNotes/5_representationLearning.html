@@ -311,6 +311,9 @@ h_{ij} = a\left( \beta + \sum_{m=1}^3 \sum_{n=1}^3 w_{mn} x_{i+m-2,j+n-2} \right
 </section>
 <section id="dot-product-self-attention" class="slide level2">
 <h2>Dot-Product Self-Attention</h2>
+<p>Inputs <span class="math inline">\(\mathbf{x}_m\in\mathbb{R}^D\)</span>, outputs <span class="math inline">\(\mathbf{sa}_n\in\mathbb{R}^D\)</span>.</p>
+<p>Values <span class="math inline">\(\mathbf{v}_m\in\mathbb{R}^D\)</span>, queries <span class="math inline">\(\mathbf{q}_n\in\mathbb{R}^{D_q}\)</span>, keys <span class="math inline">\(\mathbf{k}_m\in\mathbb{R}^{D_q}\)</span>.</p>
+<div class="fragment">
 <p><span class="math display">\[\begin{align*}
 \mathbf{v}_m &amp;= \mathbf{\beta}_v + \mathbf{\Omega}_v \mathbf{x}_m \qquad\qquad m=1,\dots,N \\
 \mathbf{q}_n &amp;= \mathbf{\beta}_q + \mathbf{\Omega}_q \mathbf{x}_n \qquad\qquad\, n=1,\dots,N \\
@@ -318,11 +321,10 @@ h_{ij} = a\left( \beta + \sum_{m=1}^3 \sum_{n=1}^3 w_{mn} x_{i+m-2,j+n-2} \right
 a[\mathbf{x}_m,\mathbf{x}_n] &amp;= \frac{\exp\left( \mathbf{k}_m^T \mathbf{q}_n \right)}{\sum_{m'=1}^N \exp\left( \mathbf{k}_{m'}^T \mathbf{q}_n \right)} \, m,n=1,\dots,N \\
 \mathbf{sa}_n[\mathbf{x}_1,\dots,\mathbf{x}_N] &amp;= \sum_{m=1}^N a[\mathbf{x}_m,\mathbf{x}_n] \mathbf{v}_m \qquad n=1,\dots,N
 \end{align*}\]</span></p>
-<ul>
-<li class="fragment">inputs <span class="math inline">\(\mathbf{x}_m\in\mathbb{R}^D\)</span>, outputs <span class="math inline">\(\mathbf{sa}_n\in\mathbb{R}^D\)</span></li>
-<li class="fragment">values <span class="math inline">\(\mathbf{v}_m\in\mathbb{R}^D\)</span>, queries <span class="math inline">\(\mathbf{q}_n\in\mathbb{R}^{D_q}\)</span>, keys <span class="math inline">\(\mathbf{k}_m\in\mathbb{R}^{D_q}\)</span></li>
-<li class="fragment">keys <span class="math inline">\(\mathbf{k}_m\)</span> compete for <em>attention</em> <span class="math inline">\(a[\mathbf{x}_m,\mathbf{x}_n]\)</span> the <span class="math inline">\(n\)</span>-th output pays to input/value <span class="math inline">\(\mathbf{v}_m\)</span> (which depends on their similarity to query <span class="math inline">\(\mathbf{q}_n\)</span>)</li>
-</ul>
+</div>
+<div class="fragment">
+<p>Keys <span class="math inline">\(\mathbf{k}_m\)</span> compete for <em>attention</em> <span class="math inline">\(a[\mathbf{x}_m,\mathbf{x}_n]\)</span> the <span class="math inline">\(n\)</span>-th output pays to input/value <span class="math inline">\(\mathbf{v}_m\)</span> (which depends on their similarity to query <span class="math inline">\(\mathbf{q}_n\)</span>)</p>
+</div>
 </section>
 <section id="self-attention-as-routing" class="slide level2">
 <h2>Self-Attention as Routing</h2>
