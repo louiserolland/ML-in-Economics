@@ -28,6 +28,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #e1e4e8; background-color: #24292e; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #e1e4e8; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #f97583; } /* Attribute */
+    code span.bn { color: #79b8ff; } /* BaseN */
+    code span.bu { color: #f97583; } /* BuiltIn */
+    code span.cf { color: #f97583; } /* ControlFlow */
+    code span.ch { color: #9ecbff; } /* Char */
+    code span.cn { color: #79b8ff; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #f97583; } /* DataType */
+    code span.dv { color: #79b8ff; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #f97583; font-weight: bold; } /* Extension */
+    code span.fl { color: #79b8ff; } /* Float */
+    code span.fu { color: #b392f0; } /* Function */
+    code span.im { color: #9ecbff; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #f97583; } /* Keyword */
+    code span.op { color: #e1e4e8; } /* Operator */
+    code span.ot { color: #b392f0; } /* Other */
+    code span.pp { color: #f97583; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #79b8ff; } /* SpecialChar */
+    code span.ss { color: #9ecbff; } /* SpecialString */
+    code span.st { color: #9ecbff; } /* String */
+    code span.va { color: #ffab70; } /* Variable */
+    code span.vs { color: #9ecbff; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -234,6 +299,12 @@ Q^{\pi}(s_t,a_t) &amp;= r(s_t,a_t) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s_t,a_t) \s
 \end{align*}\]</span></p>
 </div>
 </section>
+<section>
+<section id="tabular-reinforcement-learning" class="title-slide slide level1 center">
+<h1>Tabular Reinforcement Learning</h1>
+<p><span class="citation" data-cites="prince2023">(<a href="#/references" role="doc-biblioref" onclick="">Prince 2023</a>, Ch. 19.3)</span></p>
+<p>Tabular RL algorithms do not rely on function approximation.</p>
+</section>
 <section id="model-based-mb-vs.-model-free-mf" class="slide level2">
 <h2>Model-Based (MB) vs.&nbsp;Model-Free (MF)</h2>
 <ul>
@@ -252,20 +323,47 @@ Q^{\pi}(s_t,a_t) &amp;= r(s_t,a_t) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s_t,a_t) \s
 </ul></li>
 </ul>
 </section>
-<section>
-<section id="tabular-reinforcement-learning" class="title-slide slide level1 center">
-<h1>Tabular Reinforcement Learning</h1>
-<p><span class="citation" data-cites="prince2023">(<a href="#/references" role="doc-biblioref" onclick="">Prince 2023</a>, Ch. 19.3)</span></p>
-<p>Tabular RL algorithms do not rely on function approximation.</p>
-</section>
 <section id="dynamic-programming-mb" class="slide level2">
 <h2>Dynamic Programming (MB)</h2>
+<div style="font-size: 0.75em;">
 <p><span class="math display">\[\begin{align*}
 V(s_t) &amp;\leftarrow \sum_{a_t} \pi(a_t|s_t) \left[ r(s_t,a_t) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s_t,a_t) V(s_{t+1}) \right] \\
 \pi(a_t|s_t) &amp;\leftarrow \arg\max_{a_t} \left[ r(s_t,a_t) + \gamma \sum_{s_{t+1}} P(s_{t+1}|s_t,a_t) V(s_{t+1}) \right]
 \end{align*}\]</span></p>
-<p>Policy iteration: At each policy improvement, iterate policy evaluation to convergence.</p>
-<p>Value iteration: One policy evaluation step per policy improvement.</p>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Policy iteration</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href=""></a>initialize π(s), V(s)</span>
+<span id="cb1-2"><a href=""></a>policy_stable ← false</span>
+<span id="cb1-3"><a href=""></a>while not policy_stable:</span>
+<span id="cb1-4"><a href=""></a>  do:</span>
+<span id="cb1-5"><a href=""></a>    Δ ← 0</span>
+<span id="cb1-6"><a href=""></a>    for each state s:</span>
+<span id="cb1-7"><a href=""></a>      v ← V(s)</span>
+<span id="cb1-8"><a href=""></a>      V(s) ← Σ_a π(a|s)[r(s,a) + γΣ_{s'}P(s'|s,a)V(s')]</span>
+<span id="cb1-9"><a href=""></a>      Δ ← max(Δ, |v - V(s)|)</span>
+<span id="cb1-10"><a href=""></a>  while Δ ≥ θ</span>
+<span id="cb1-11"><a href=""></a>  policy_stable ← true</span>
+<span id="cb1-12"><a href=""></a>  for each state s:</span>
+<span id="cb1-13"><a href=""></a>    a ← π(s)</span>
+<span id="cb1-14"><a href=""></a>    π(s) ← argmax_a [r(s,a) + γΣ_{s'}P(s'|s,a)V(s')]</span>
+<span id="cb1-15"><a href=""></a>    if a ≠ π(s): policy_stable ← false</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Evaluate current <span class="math inline">\(\pi\)</span> fully before updating <span class="math inline">\(\pi\)</span>; until it no longer changes.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Value iteration</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>initialize V(s)</span>
+<span id="cb2-2"><a href=""></a>do:</span>
+<span id="cb2-3"><a href=""></a>  Δ ← 0</span>
+<span id="cb2-4"><a href=""></a>  for each state s:</span>
+<span id="cb2-5"><a href=""></a>    v ← V(s)</span>
+<span id="cb2-6"><a href=""></a>    V(s) ← max_a [r(s,a) + γΣ_{s'}P(s'|s,a)V(s')]</span>
+<span id="cb2-7"><a href=""></a>    Δ ← max(Δ, |v - V(s)|)</span>
+<span id="cb2-8"><a href=""></a>while Δ ≥ θ</span>
+<span id="cb2-9"><a href=""></a>for each state s:</span>
+<span id="cb2-10"><a href=""></a>  π(s) ← argmax_a [r(s,a) + γΣ_{s'}P(s'|s,a)V(s')]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Update <span class="math inline">\(V\)</span> with Bellman optimality backups until convergence.</p>
+</div></div>
 
 <img data-src="../img/UDL/Chap19/ReinforceDP.svg" class="white-background quarto-figure quarto-figure-center r-stretch"></section>
 <section id="monte-carlo-value-estimation-mf" class="slide level2">
@@ -301,6 +399,7 @@ Q(s_t,a_t) &amp;\leftarrow Q(s_t,a_t) + \alpha \left[ r(s_t,a_t) + \gamma \max_{
 \end{align*}\]</span> to minimize the least squares loss <span class="math display">\[\begin{align*}
 L(\phi) =  \left( r(s_t,a_t) + \gamma \max_{a} q(s_{t+1},a;\phi) - q(s_t,a_t;\phi) \right)^2
 \end{align*}\]</span></p>
+<p>Semi-gradient: the update uses <span class="math inline">\(\nabla_\phi L\)</span> only through <span class="math inline">\(q(s_t,a_t;\phi)\)</span>; the bootstrap <span class="math inline">\(r + \gamma \max_{a} q(s_{t+1},a;\phi)\)</span> is treated as fixed w.r.t. <span class="math inline">\(\phi\)</span> in this step.</p>
 <p>Convergence no longer guaranteed.</p>
 </section>
 <section id="deep-q-network-dqn" class="slide level2">
@@ -315,17 +414,59 @@ L(\phi) =  \left( r(s_t,a_t) + \gamma \max_{a} q(s_{t+1},a;\phi) - q(s_t,a_t;\ph
 <section>
 <section id="policy-gradient-methods-mf" class="title-slide slide level1 center">
 <h1>Policy Gradient Methods (MF)</h1>
-<p><span class="citation" data-cites="prince2023">(<a href="#/references" role="doc-biblioref" onclick="">Prince 2023</a>, Ch. 19.5)</span></p>
+<p><span class="citation" data-cites="prince2023">(<a href="#/references" role="doc-biblioref" onclick="">Prince 2023</a>, Ch. 19.5 and Ch. 19.6)</span></p>
 </section>
 <section id="gradient-update" class="slide level2">
 <h2>Gradient Update</h2>
-<p>Directly learn policy <span class="math inline">\(\pi(a_t|\mathbf{s}_t;\mathbf{\theta})\)</span> <span class="math display">\[\begin{align*}
+<p>Directly learn policy <span class="math inline">\(\pi(a_t|\mathbf{s}_t;\mathbf{\theta})\)</span>:</p>
+<div style="font-size: 0.72em;">
+<p><span class="math display">\[\begin{align*}
 \arg\max_{\mathbf{\theta}} \int \left(\sum_{t=1}^T r(\mathbf{s}_t,a_t)\right) P(\mathbf{s}_1)\prod_{t=1}^T \pi(a_t|\mathbf{s}_t;\mathbf{\theta})P(\mathbf{s}_{t+1}|\mathbf{s}_t,a_t) d\mathbf{s}_1da_1 \ldots d\mathbf{s}_T d a_T
-\end{align*}\]</span> yields (approx. integral with sum over <span class="math inline">\(I\)</span> episodes) gradient ascent update <span class="math display">\[\begin{align*}
-\mathbf{\theta} &amp;\leftarrow \mathbf{\theta} + \frac{\alpha }{I}\sum_{i=1}^I\sum_{t=1}^T \nabla_{\mathbf{\theta}} \log \pi(a_{it}|\mathbf{s}_{it};\mathbf{\theta}) \sum_{k=t}^T r_{ik}
 \end{align*}\]</span></p>
+</div>
+<p>yields (approximating integral with sum over <span class="math inline">\(I\)</span> episodes with trajectories <span class="math inline">\(\mathbf{\tau}_i\)</span>) the gradient ascent update</p>
+<div style="font-size: 0.72em;">
+<p><span class="math display">\[\begin{align*}
+\mathbf{\theta} &amp;\leftarrow \mathbf{\theta} + \frac{\alpha }{I}\sum_{i=1}^I\frac{1}{P(\mathbf{\tau}_i|\mathbf{\theta})}\frac{\partial P(\mathbf{\tau}_i|\mathbf{\theta})}{\partial \mathbf{\theta}} \sum_{t=1}^T r_{it}
+\end{align*}\]</span></p>
+</div>
+<p>which updates <span class="math inline">\(\mathbf{\theta}\)</span> to increase likelihood of observed trajectories in proportion to their returns.</p>
 
 <img data-src="../img/UDL/Chap19/ReinforcePolicyGrad.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="gradient-update-1" class="slide level2">
+<h2>Gradient Update</h2>
+<p>Equivalently <span class="math display">\[\begin{align*}
+\mathbf{\theta} &amp;\leftarrow \mathbf{\theta} + \frac{\alpha }{I}\sum_{i=1}^I\frac{ \partial \log P(\mathbf{\tau}_i|\mathbf{\theta})}{\partial \mathbf{\theta}} \sum_{t=1}^T r_{it}
+\end{align*}\]</span> which (writing out <span class="math inline">\(P(\tau_i|\theta)\)</span> and simplifying) gives rise to <span class="math display">\[\begin{align*}
+\mathbf{\theta} &amp;\leftarrow \mathbf{\theta} + \frac{\alpha }{I}\sum_{i=1}^I\sum_{t=1}^T \nabla_{\mathbf{\theta}} \log \pi(a_{it}|\mathbf{s}_{it};\mathbf{\theta}) \sum_{k=t}^T r_{ik}
+\end{align*}\]</span></p>
+</section>
+<section id="reinforce-algorithm" class="slide level2">
+<h2>REINFORCE algorithm</h2>
+<p>MC policy gradient method: sample episodes from <span class="math inline">\(\pi_{a}(s;\theta)\)</span> (e.g.&nbsp;neural network with softmax output).</p>
+<p><span class="math display">\[\begin{align*}
+G_{it} &amp;= \sum_{k=t+1}^T \gamma^{k-t-1} r_{ik} \\
+\theta &amp;\leftarrow \theta + \alpha \gamma^t  \nabla_{\theta}\log \pi_{a_{it}}(s_{it};\mathbf{\theta}) G_{it}
+\end{align*}\]</span></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href=""></a>initialize policy parameters \mathbf{\theta}</span>
+<span id="cb3-2"><a href=""></a>repeat:</span>
+<span id="cb3-3"><a href=""></a>  sample I episodes \tau_i \sim \pi_{\mathbf{\theta}}(\cdot|\mathbf{s})</span>
+<span id="cb3-4"><a href=""></a>  \Delta \mathbf{\theta} \leftarrow \mathbf{0}</span>
+<span id="cb3-5"><a href=""></a>  for i = 1,\ldots,I:</span>
+<span id="cb3-6"><a href=""></a>    G_{i,T_i+1} \leftarrow 0</span>
+<span id="cb3-7"><a href=""></a>    for t = T_i,\ldots,1:</span>
+<span id="cb3-8"><a href=""></a>      G_{it} \leftarrow r_{it} + \gamma G_{i,t+1}</span>
+<span id="cb3-9"><a href=""></a>    for t = 1,\ldots,T_i:</span>
+<span id="cb3-10"><a href=""></a>      \Delta \mathbf{\theta} \leftarrow \Delta \mathbf{\theta} + \nabla_{\mathbf{\theta}} \log \pi(a_{it}|\mathbf{s}_{it};\mathbf{\theta})\, G_{it}</span>
+<span id="cb3-11"><a href=""></a>  \mathbf{\theta} \leftarrow \mathbf{\theta} + \frac{\alpha}{I}\Delta \mathbf{\theta}</span>
+<span id="cb3-12"><a href=""></a>until convergence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="baselines" class="slide level2">
+<h2>Baselines</h2>
+<p>In practice, subtracting a baseline <span class="math inline">\(b(\mathbf{s}_{it})\)</span> gives <span class="math display">\[\begin{align*}
+\mathbf{\theta} \leftarrow \mathbf{\theta} + \frac{\alpha}{I}\sum_{i=1}^{I}\sum_{t=1}^{T}\nabla_{\mathbf{\theta}}\log \pi(a_{it}|\mathbf{s}_{it};\mathbf{\theta})\left(G_{it}-b(\mathbf{s}_{it})\right)
+\end{align*}\]</span> which keeps the gradient unbiased and reduces variance.</p>
+</section>
 <section id="actor-critic-methods" class="slide level2">
 <h2>Actor-Critic Methods</h2>
 <p>Temporal difference (TD) policy gradient method.</p>
@@ -334,10 +475,77 @@ L(\phi) =  \left( r(s_t,a_t) + \gamma \max_{a} q(s_{t+1},a;\phi) - q(s_t,a_t;\ph
 L(\phi) &amp;= \sum_{i=1}^I\sum_{t=1}^T  \left( r_{it} + \gamma v(\mathbf{s}_{i,t+1},\phi) - v(\mathbf{s}_{i,t},\phi) \right)^2
 \end{align*}\]</span> where <span class="math inline">\(\pi(\mathbf{s}_t,\mathbf{\theta})\)</span> is the actor and <span class="math inline">\(v(\mathbf{s}_t,\phi)\)</span> the critic.</p>
 </section>
+<section id="trust-region-policy-optimization-trpo" class="slide level2">
+<h2>Trust Region Policy Optimization (TRPO)</h2>
+<p>Constrain policy updates by a KL trust region to avoid large unstable policy jumps.</p>
+<p><span class="math display">\[\begin{align*}
+\max_{\theta}\; \mathbb{E}_t\!\left[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{\mathrm{old}}}(a_t|s_t)}\hat A_t\right]
+\quad
+\text{s.t.}\quad
+\mathbb{E}_t\!\left[D_{\mathrm{KL}}\!\left(\pi_{\theta_{\mathrm{old}}}(\cdot|s_t)\,\|\,\pi_{\theta}(\cdot|s_t)\right)\right]\le \delta
+\end{align*}\]</span></p>
+</section>
+<section id="proximal-policy-optimization-ppo" class="slide level2">
+<h2>Proximal Policy Optimization (PPO)</h2>
+<p>Actor-critic method that limits policy changes per update using a clipped objective.</p>
+<p><span class="math display">\[\begin{align*}
+r_t(\theta) &amp;= \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{\mathrm{old}}}(a_t|s_t)} \\
+L^{\mathrm{CLIP}}(\theta) &amp;= \mathbb{E}_t \left[\min \left(r_t(\theta)\hat A_t,\ \mathrm{clip}(r_t(\theta),1-\epsilon,1+\epsilon)\hat A_t\right)\right]
+\end{align*}\]</span></p>
+<p>Typical loop:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href=""></a>collect rollouts with π_old</span>
+<span id="cb4-2"><a href=""></a>estimate advantages Â_t (with critic)</span>
+<span id="cb4-3"><a href=""></a>for k epochs:</span>
+<span id="cb4-4"><a href=""></a>  update actor with clipped objective</span>
+<span id="cb4-5"><a href=""></a>  update critic with value loss</span>
+<span id="cb4-6"><a href=""></a>set π_old ← π</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="soft-actor-critic-sac" class="slide level2">
+<h2>Soft Actor-Critic (SAC)</h2>
+<p>Off-policy maximum-entropy actor-critic for continuous control. <span class="math display">\[\begin{align*}
+J(\pi) = \mathbb{E}\left[\sum_t r(s_t,a_t) + \alpha \,\mathcal{H}\!\left(\pi(\cdot|s_t)\right)\right]
+\end{align*}\]</span> The entropy term encourages exploration and makes training more stable.</p>
+</section>
+<section id="group-relative-policy-optimization-grpo" class="slide level2">
+<h2>Group Relative Policy Optimization (GRPO)</h2>
+<p>Policy optimization without a learned value critic, using relative rewards inside a sampled group.</p>
+<p><span class="math display">\[\begin{align*}
+\hat A_i &amp;= \frac{r_i - \bar r}{\sigma_r + \epsilon} \\
+L^{\mathrm{GRPO}}(\theta) &amp;= \mathbb{E}\left[\min\left(r_i(\theta)\hat A_i,\ \mathrm{clip}(r_i(\theta),1-\epsilon,1+\epsilon)\hat A_i\right)\right] - \beta\, D_{\mathrm{KL}}(\pi_\theta\|\pi_{\mathrm{ref}})
+\end{align*}\]</span></p>
+<p>Typical loop:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href=""></a>sample G outputs per prompt from π_old</span>
+<span id="cb5-2"><a href=""></a>compute reward r_i for each output</span>
+<span id="cb5-3"><a href=""></a>normalize rewards within group to get Â_i</span>
+<span id="cb5-4"><a href=""></a>update policy with clipped objective + KL penalty</span>
+<span id="cb5-5"><a href=""></a>set π_old ← π</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section></section>
+<section>
+<section id="offline-rl" class="title-slide slide level1 center">
+<h1>Offline RL</h1>
+<p><span class="citation" data-cites="prince2023">(<a href="#/references" role="doc-biblioref" onclick="">Prince 2023</a>, Ch. 19.7)</span></p>
+</section>
 <section id="offline-rl-decision-transformer" class="slide level2">
 <h2>Offline RL: Decision Transformer</h2>
 
 <img data-src="../img/UDL/Chap19/ReinforceDecisionTransformer.svg" class="quarto-figure quarto-figure-center r-stretch"><p>Replace reward <span class="math inline">\(r_t\)</span> with returns-to-go <span class="math inline">\(R_{t:T}=\sum_{t'=t}^T  r_{t'}\)</span> during training.</p>
+</section></section>
+<section>
+<section id="reinforcement-learning-from-human-feedback-rlhf" class="title-slide slide level1 center">
+<h1>Reinforcement Learning from Human Feedback (RLHF)</h1>
+
+</section>
+<section id="from-policy-gradients-to-rlhf" class="slide level2">
+<h2>From Policy Gradients to RLHF</h2>
+<p>RLHF can be viewed as policy gradient optimization on sequence models: <span class="math display">\[\begin{align*}
+\max_{\pi}\; \mathbb{E}_{y\sim \pi(\cdot|x)}\left[r_{\text{RM}}(x,y)\right] - \beta\,D_{\mathrm{KL}}(\pi\|\pi_{\mathrm{ref}})
+\end{align*}\]</span> where <span class="math inline">\(r_{\text{RM}}\)</span> is a learned reward model from human preferences.</p>
+<p>Connection to stochastic choice and log utility: <span class="math display">\[\begin{align*}
+P(y^+ \succ y^-|x) = \sigma\!\left(u(x,y^+) - u(x,y^-)\right)
+\end{align*}\]</span> which is the Bradley-Terry / logistic random utility form, with latent utility <span class="math inline">\(u(x,y)\)</span>.</p>
+<p>Preference learning step: <span class="math display">\[\begin{align*}
+\max_{\psi}\sum_{(x,y^+,y^-)} \log \sigma\!\left(r_{\psi}(x,y^+) - r_{\psi}(x,y^-)\right)
+\end{align*}\]</span> Then optimize the policy with PPO style updates (or critic-free variants such as GRPO).</p>
 </section>
 </section>
 <section id="references" class="title-slide slide level1 smaller scrollable">
